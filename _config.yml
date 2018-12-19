@@ -6,16 +6,16 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: 甲壳虫爱上了夏天
-name: Wayne Chu
-email: waynechu1996@gmail.com
-location: Jiangxi, China
-company: Henan University
-company_url: http://www.henu.edu.cn/
-github_url: https://github.com/Z-Beatles
-description: This is a personal website of Wayne Chu | 个人博客，用于记录学习笔记
+title: su
+name: su
+email: l95475967@163.com
+location: Fujian, China
+company: Xidian University
+company_url: http://www.xidian.edu.cn/
+github_url: https://github.com/dar1in9
+description: This is a personal website of su | 个人博客，用于记录学习笔记
 favicon: favicon.png
-repository: Z-Beatles/Z-Beatles.github.io
+repository: dar1in9/dar1in9.github.io
 
 # The base hostname & protocol for your site
 # For local test, please use http://localhost:4000
