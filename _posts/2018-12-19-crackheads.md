@@ -16,7 +16,7 @@ tags: [逆向]
 
 ![img](/assets/images/crackhead2.png)
 
-3.来到这里，发现下面有成功弹窗。判断此为关键call，F7跟进。
+3.来到这里，发现下面有成功弹窗。判断此为关键call，F7跟进。（如要爆破，将jne nop掉即可）
 
 ![img](/assets/images/crackhead3.png)
 
@@ -28,14 +28,39 @@ tags: [逆向]
 
 ![img](/assets/images/crackhead5.png)
 
+6.那么esi是哪来的
 
+7.看这个地址，在内存窗口按ctrl+g转到这个地址，右键下内存写入断点，F9观察。
+
+![img](/assets/images/crackhead6.png)
+
+8.发现出现一串字符串。
+
+![img](/assets/images/crackhead7.png)
+
+9.神奇。
+
+![img](/assets/images/crackhead8.png)
+
+10.回到调用，发现这俩。
+
+![img](/assets/images/crackhead9.png)
+
+11.google一下，发现一个是返回磁盘类型（本地磁盘是3），一个是返回卷标。
+
+12.我们在GetVolumeInformation下断，F9来到这，详见注释。
+
+![img](/assets/images/crackhead10.png)
+
+13.下面是我写的keygen。（注意读取的卷标存入ebx中是倒着的！！）
+
+![img](/assets/images/crackhead11.png)
 
 ### CrackHead‘s  Keygen
 
 ```c
 #include <windows.h> 
 #include <stdio.h> 
-#include <stdlib.h>
 
 int main(int argc,char **argv) 
 { 
@@ -47,7 +72,7 @@ int main(int argc,char **argv)
 	int c; 
 	printf("请输入软件所在磁盘:"); 
 	scanf("%c",&a[0]);
-	GetVolumeInformation(a,VolumeName,12,&VolumeSerialNumber,NULL,NULL,NULL,10); //VolumeName卷标
+	GetVolumeInformation(a,VolumeName,12,&VolumeSerialNumber,NULL,NULL,NULL,10);
 	
 	for(i=3;i>=0;i--)
 	{
@@ -67,3 +92,4 @@ int main(int argc,char **argv)
 ```
 
 
+(萌新一个，欢迎指正。)
