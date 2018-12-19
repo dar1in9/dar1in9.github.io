@@ -22,8 +22,11 @@ tags: [逆向]
 
 4.发现这里有我们的假码,详见注释。
 
+![img](/assets/images/crackhead4.png)
 
+5.F8单步回到这里，将eax（我们的码），与esi真码对比，若不同则跳转（gg）。
 
+![img](/assets/images/crackhead5.png)
 
 
 
