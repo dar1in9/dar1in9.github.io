@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="NLP,自然语言处理," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这是崔斯特的第二十一篇原创文章">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【RNG vs SKT】弹幕的自然语言的初步分析">
+<meta property="og:url" content="https://zhangslob.github.io/2017/12/20/【RNG-vs-SKT】弹幕的自然语言的初步分析/index.html">
+<meta property="og:site_name" content="小歪的博客">
+<meta property="og:description" content="这是崔斯特的第二十一篇原创文章">
+<meta property="og:image" content="https://i.imgur.com/xf7kEI8.jpg">
+<meta property="og:image" content="https://i.imgur.com/Zm6mMti.jpg">
+<meta property="og:image" content="https://i.imgur.com/df59MQw.jpg">
+<meta property="og:image" content="https://i.imgur.com/6PcshNl.jpg">
+<meta property="og:image" content="https://i.imgur.com/R6ltujq.jpg">
+<meta property="og:image" content="https://i.imgur.com/PMISApU.jpg">
+<meta property="og:image" content="https://i.imgur.com/iEuDbFT.jpg">
+<meta property="og:image" content="https://i.imgur.com/FAOkrny.jpg">
+<meta property="og:image" content="https://i.imgur.com/OttArJD.jpg">
+<meta property="og:image" content="https://i.imgur.com/AI6dJ5P.jpg">
+<meta property="og:updated_time" content="2017-12-20T14:40:46.728Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【RNG vs SKT】弹幕的自然语言的初步分析">
+<meta name="twitter:description" content="这是崔斯特的第二十一篇原创文章">
+<meta name="twitter:image" content="https://i.imgur.com/xf7kEI8.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://zhangslob.github.io/2017/12/20/【RNG-vs-SKT】弹幕的自然语言的初步分析/"/>
+
+
+
+
+
+  <title>【RNG vs SKT】弹幕的自然语言的初步分析 | 小歪的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3568775191c592732e51a6159a249e2c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+
+<div id="hexo-helper-live2d">
+  <canvas id="live2dcanvas" width="150" height="300"></canvas>
+</div>
+<style>
+  #live2dcanvas{
+    position: fixed;
+    width: 150px;
+    height: 300px;
+    opacity:0.7;
+    right: 0px;
+    z-index: 999;
+    pointer-events: none;
+    bottom: -20px;
+  }
+</style>
+<script type="text/javascript" src="/live2d/device.min.js"></script>
+<script type="text/javascript">
+const loadScript = function loadScript(c,b){var a=document.createElement("script");a.type="text/javascript";"undefined"!=typeof b&&(a.readyState?a.onreadystatechange=function(){if("loaded"==a.readyState||"complete"==a.readyState)a.onreadystatechange=null,b()}:a.onload=function(){b()});a.src=c;document.body.appendChild(a)};
+(function(){
+  if((typeof(device) != 'undefined') && (device.mobile())){
+    document.getElementById("live2dcanvas").style.width = '75px';
+    document.getElementById("live2dcanvas").style.height = '150px';
+  }else
+    if (typeof(device) === 'undefined') console.error('Cannot find current-device script.');
+  loadScript("/live2d/script.js", function(){loadlive2d("live2dcanvas", "/live2d/assets/koharu.model.json", 0.5);});
+})();
+</script>
+
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+		<a href="https://github.com/zhangslob"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小歪的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">人生苦短，我学Python</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zhangslob.github.io/2017/12/20/【RNG-vs-SKT】弹幕的自然语言的初步分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小歪">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1488291259&di=9b54b1ab9a4a02ec51e4344e960692d6&src=http://ni.ppsrc.com/aR24MryiGC7HFCEJTB-wgQ@640w_640h_75Q.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小歪的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【RNG vs SKT】弹幕的自然语言的初步分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-20T22:17:35+08:00">
+                2017-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/NLP/" itemprop="url" rel="index">
+                    <span itemprop="name">NLP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/12/20/【RNG-vs-SKT】弹幕的自然语言的初步分析/" class="leancloud_visitors" data-flag-title="【RNG vs SKT】弹幕的自然语言的初步分析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 <span>℃</span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,452
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <pre><code>这是崔斯特的第二十一篇原创文章
+</code></pre><p><img src="https://i.imgur.com/xf7kEI8.jpg" alt=""></p>
+<a id="more"></a>
+<p>前排 @皇族电子竞技俱乐部</p>
+<p>==================================</p>
+<p>S7中RNG对阵SKT，想必是全世界LOL玩家关注的重点。在比赛开始前，使用小葫芦把斗鱼S7直播间的弹幕都抓下来，想着做一小点分析，看看会得出什么结论。</p>
+<p>因为数据量和分析深度等原因，以下内容仅供娱乐观赏</p>
+<h1 id="数据采集"><a href="#数据采集" class="headerlink" title="数据采集"></a>数据采集</h1><p>使用小葫芦采集2万多条弹幕数据，RNG对阵SKT斗鱼直播间的弹幕，最后得到约4万可用数据</p>
+<h1 id="中文分词"><a href="#中文分词" class="headerlink" title="中文分词"></a>中文分词</h1><p>使用jieba分词，算法如下</p>
+<ul>
+<li>基于前缀词典实现高效的词图扫描，生成句子中汉字所有可能成词情况所构成的有向无环图 (DAG)</li>
+<li>采用了动态规划查找最大概率路径, 找出基于词频的最大切分组合</li>
+<li>对于未登录词，采用了基于汉字成词能力的 HMM 模型，使用了 Viterbi 算法</li>
+</ul>
+<p>简单处理之后，看起来是这样</p>
+<p><img src="https://i.imgur.com/Zm6mMti.jpg" alt=""></p>
+<p>顺便做个统计，看看都在说什么。不加停用词是这样的，全是 “<strong>666</strong>”</p>
+<p><img src="https://i.imgur.com/df59MQw.jpg" alt=""></p>
+<p>RNG和牛逼是出现最多的词语，同时也发现“<strong>卢本伟牛逼</strong>”</p>
+<p><img src="https://i.imgur.com/6PcshNl.jpg" alt=""></p>
+<blockquote>
+<p>弱弱问一句“唐梦琼”是谁</p>
+</blockquote>
+<p>下面是词云，Python的词云做不来不好看，所以我使用的工具 <a href="https://timdream.org/wordcloud/#" target="_blank" rel="external">HTML5 Word Cloud</a></p>
+<p><img src="https://i.imgur.com/R6ltujq.jpg" alt=""></p>
+<blockquote>
+<p>弹幕内容词云</p>
+</blockquote>
+<p><img src="https://i.imgur.com/PMISApU.jpg" alt=""></p>
+<blockquote>
+<p>用户昵称词云</p>
+</blockquote>
+<h1 id="情感分析"><a href="#情感分析" class="headerlink" title="情感分析"></a>情感分析</h1><p>这里使用的是 <a href="https://github.com/isnowfy/snownlp" target="_blank" rel="external">isnowfy/snownlp</a>。SnowNLP是一个python写的类库，可以方便的处理中文文本内容，是受到了<a href="https://github.com/sloria/TextBlob" target="_blank" rel="external">TextBlob</a>的启发而写的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> snownlp <span class="keyword">import</span> SnowNLP</div><div class="line"></div><div class="line">s = SnowNLP(<span class="string">u'这个东西真心很赞'</span>)</div><div class="line">s.sentiments    <span class="comment"># 0.9769663402895832 positive的概率</span></div></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/iEuDbFT.jpg" alt=""></p>
+<p>有点难看，直接看数据吧，得到的结果是在 [0，1] 之间的<strong>positive的概率</strong></p>
+<p>51659中有44705个大于0.5，占比86.54%，有 6954条弹幕低于0.5，占比13.46%。</p>
+<p>弹幕中积极的概率还是相当高的，说明观众还是比较赞赏比赛的。</p>
+<p><img src="https://i.imgur.com/FAOkrny.jpg" alt=""></p>
+<h1 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h1><p>TF-IDF是信息检索领域非常重要的搜索词重要性度量；tf-idf是一种统计方法，用以评估一字词对于一个文件集或一个语料库中的其中一份文件的重要程度。</p>
+<p>词频TF(Term Frequency)</p>
+<p>词w在文档d中出现次数count(w, d)和文档d中总词数size(d)的比值：</p>
+<p><img src="https://i.imgur.com/OttArJD.jpg" alt=""></p>
+<p>基于 TF-IDF 算法的关键词抽取：</p>
+<ul>
+<li>RNG</li>
+<li>rng</li>
+<li>贺电</li>
+<li>加油</li>
+<li>发来</li>
+<li>666</li>
+<li>6666</li>
+<li>66666</li>
+<li>恭喜</li>
+<li>66666666666666</li>
+<li>666666</li>
+<li>66666666666</li>
+<li>6666666</li>
+<li>skt</li>
+<li>李哥</li>
+<li>66666666666666666666</li>
+<li>SKT</li>
+<li>66666666</li>
+<li>666666666</li>
+<li>马甲</li>
+</ul>
+<p>在没有加上停用词的前提下，可以看到效果并不理想</p>
+<p>TextRank是在Google的PageRank算法启发下，针对文本里的句子设计的权重算法，目标是自动摘要。它利用投票的原理，让每一个单词给它的邻居（术语称窗口）投赞成票，票的权重取决于自己的票数。</p>
+<p><img src="https://i.imgur.com/AI6dJ5P.jpg" alt=""></p>
+<p>基于 TextRank 算法的关键词抽取：</p>
+<ul>
+<li>发来</li>
+<li>贺电</li>
+<li>加油</li>
+<li>学院</li>
+<li>机器人</li>
+<li>大学</li>
+<li>职业</li>
+<li>船长</li>
+<li>技术</li>
+<li>小炮</li>
+<li>没有</li>
+<li>解说</li>
+<li>中国</li>
+<li>经济</li>
+<li>开始</li>
+<li>无敌</li>
+<li>香锅</li>
+<li>垃圾</li>
+<li>老鼠</li>
+<li>科技</li>
+</ul>
+<h1 id="特征选择"><a href="#特征选择" class="headerlink" title="特征选择"></a>特征选择</h1><p>Word2vec是一个将单词表征成向量的形式，它可以把文本内容的处理简化为向量空间中的向量运算，计算出向量空间上的相似度，来表示文本语义上的相似度。</p>
+<h2 id="计算相似度："><a href="#计算相似度：" class="headerlink" title="计算相似度："></a>计算相似度：</h2><p>首先是RNG：</p>
+<ul>
+<li>rng 0.9893965721130371</li>
+<li>加油 0.9829007983207703</li>
+<li>必胜 0.9790929555892944</li>
+<li>Rng 0.9743078947067261</li>
+<li>恭喜 0.9733642339706421</li>
+<li>中国队 0.9397183656692505</li>
+<li>关 0.9283092021942139</li>
+<li>&lt; 0.9278833866119385</li>
+<li>燕尾港 0.9222617149353027</li>
+<li>B 0.9143030643463135</li>
+</ul>
+<p><strong>RNG加油</strong></p>
+<p>看看SKT：</p>
+<ul>
+<li>skt 0.9911665320396423</li>
+<li>皇族 0.972029983997345</li>
+<li>＾ 0.970970094203949</li>
+<li>稳住 0.9653508067131042</li>
+<li>干死 0.9643667340278625</li>
+<li>牛比 0.9629441499710083</li>
+<li>一起 0.9625348448753357</li>
+<li>@ 0.9619969725608826</li>
+<li>鸟巢 0.9608791470527649</li>
+<li>冠军 0.9608250856399536</li>
+</ul>
+<p><strong>稳住，干死SKT？</strong></p>
+<p>贺电：</p>
+<ul>
+<li>学院 0.9811943769454956</li>
+<li>大学 0.980491042137146</li>
+<li>技术 0.9766334295272827</li>
+<li>职业 0.9691535234451294</li>
+<li>电子科技 0.9668481349945068</li>
+<li>发来 0.9619022607803345</li>
+<li>科技 0.9594647884368896</li>
+<li>山东 0.9568137526512146</li>
+<li>重庆 0.9440888166427612</li>
+<li>哈尔滨 0.939836859703064</li>
+</ul>
+<p><strong>山东XX学院发来贺电</strong></p>
+<p>加油：</p>
+<ul>
+<li>必胜 0.9876022934913635</li>
+<li>RNG 0.9829007983207703</li>
+<li>rng 0.960281252861023</li>
+<li>Rng 0.9591789841651917</li>
+<li>恭喜 0.9551880359649658</li>
+<li>中国队 0.9436988830566406</li>
+<li>关 0.94183349609375</li>
+<li>！ 0.921385645866394</li>
+<li>~ 0.9148629903793335</li>
+<li>@ 0.9062787294387817</li>
+</ul>
+<p><strong>RNG加油，RNG必胜</strong></p>
+<p>小狗：</p>
+<ul>
+<li>吹 0.9970275163650513</li>
+<li>无敌 0.996719241142273</li>
+<li>神超 0.996111273765564</li>
+<li>后期 0.9959050416946411</li>
+<li>厉害 0.9957337975502014</li>
+<li>凶 0.9957261681556702</li>
+<li>强 0.9955072402954102</li>
+<li>一个 0.9954395890235901</li>
+<li>干 0.99541175365448</li>
+<li>起来 0.9952359199523926</li>
+</ul>
+<p><strong>狗吹？</strong></p>
+<p>李哥：</p>
+<ul>
+<li>还是 0.9825356602668762</li>
+<li>电话 0.9700809717178345</li>
+<li>承 0.9697628617286682</li>
+<li>心脏 0.9686012864112854</li>
+<li>陈文泽在 0.9681863188743591</li>
+<li>麻痹 0.9680625200271606</li>
+<li>响 0.9674116373062134</li>
+<li>以为 0.9664229154586792</li>
+<li>狗哥 0.9592204689979553</li>
+<li>不 0.9589840769767761</li>
+</ul>
+<p><strong>你李哥还是你李哥</strong></p>
+<p>MLXG：</p>
+<ul>
+<li>宣告 0.9958090782165527</li>
+<li>mlxg 0.9953181147575378</li>
+<li>死亡 0.995277464389801</li>
+<li>b 0.9949076771736145</li>
+<li>6666 0.9947425723075867</li>
+<li>丑 0.9943945407867432</li>
+<li>10 0.9943088293075562</li>
+<li>辣鸡 0.9940722584724426</li>
+<li>干死 0.9940391778945923</li>
+<li>锤 0.9939616918563843</li>
+</ul>
+<p><strong>香锅和死亡宣告有啥关系</strong></p>
+<p>小虎：</p>
+<ul>
+<li>笑笑 0.9971799850463867</li>
+<li>看到 0.9967395663261414</li>
+<li>解说 0.9961692690849304</li>
+<li>不是 0.9959656000137329</li>
+<li>中单 0.9951503872871399</li>
+<li>假 0.9950063824653625</li>
+<li>为什么 0.9944812655448914</li>
+<li>又 0.9942663908004761</li>
+<li>么 0.9938984513282776</li>
+<li>里奥 0.9937981367111206</li>
+</ul>
+<p><strong>小虎与加里奥（：</strong></p>
+<p>letme：</p>
+<ul>
+<li>难受 0.9964221715927124</li>
+<li>笑话 0.9959778785705566</li>
+<li>哦 0.9958946108818054</li>
+<li>世界 0.9958213567733765</li>
+<li>毒奶 0.9957934021949768</li>
+<li>KPL 0.9957884550094604</li>
+<li>上单 0.9956253170967102</li>
+<li>瓜皮 0.9955945014953613</li>
+<li>快 0.9953423738479614</li>
+<li>打团 0.9953156113624573</li>
+</ul>
+<p><strong>真难受啊</strong></p>
+<h1 id="To-Do"><a href="#To-Do" class="headerlink" title="To Do"></a>To Do</h1><ol>
+<li>可以使用朴素贝叶斯做分类模型</li>
+<li>使用机器学习性能评估指标预测精确率和准确率</li>
+<li>欢迎补充</li>
+</ol>
+<h1 id="可参考资料"><a href="#可参考资料" class="headerlink" title="可参考资料"></a>可参考资料</h1><ol>
+<li><a href="http://dsqiu.iteye.com/blog/1704960" target="_blank" rel="external">中文分词基本算法介绍</a></li>
+<li><a href="https://my.oschina.net/letiantian/blog/352693" target="_blank" rel="external">ICTCLAS 汉语词性标注集</a></li>
+<li><a href="http://www.blogjava.net/zhenandaci/category/31868.html" target="_blank" rel="external">文本分类技术</a></li>
+<li><a href="http://blog.csdn.net/zhzhl202/article/details/8197109" target="_blank" rel="external">文本分类与SVM</a></li>
+<li><a href="http://blog.csdn.net/tbkken/article/details/8062358" target="_blank" rel="external">基于贝叶斯算法的文本分类算法</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzA3MDg0MjgxNQ==&amp;mid=2652389734&amp;idx=1&amp;sn=585d22c0b2aea755a072f5dfefca868b&amp;scene=23&amp;srcid=0530UUkS6jjRAsVoT2icemoY#rd" target="_blank" rel="external">基于libsvm的中文文本分类原型</a></li>
+<li><a href="https://cosx.org/2013/03/lda-math-text-modeling#comments" target="_blank" rel="external">LDA-math-文本建模</a></li>
+<li><a href="http://blog.sina.com.cn/s/blog_8af1069601019flb.html" target="_blank" rel="external">情感分析资源</a></li>
+<li><a href="https://wenku.baidu.com/view/37e374355727a5e9856a61bc.html" target="_blank" rel="external">面向情感分析的特征抽取技术研究</a></li>
+<li><a href="http://52opencourse.com/235/%E6%96%AF%E5%9D%A6%E7%A6%8F%E5%A4%A7%E5%AD%A6%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E7%AC%AC%E4%B8%83%E8%AF%BE-%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90%EF%BC%88sentiment-analysis%EF%BC%89" target="_blank" rel="external">斯坦福大学自然语言处理第七课-情感分析</a></li>
+<li><a href="http://blog.jobbole.com/77709/0" target="_blank" rel="external">深度学习、自然语言处理和表征方法</a></li>
+<li><a href="http://licstar.net/archives/328" target="_blank" rel="external">Deep Learning in NLP （一）词向量和语言模型</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/2017/12/20/【RNG-vs-SKT】弹幕的自然语言的初步分析/">【RNG vs SKT】弹幕的自然语言的初步分析</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 小歪 的个人博客">小歪</a></p>
+  <p><span>发布时间:</span>2017年12月20日 - 22:12</p>
+  <p><span>最后更新:</span>2017年12月20日 - 22:12</p>
+  <p><span>原始链接:</span><a href="/2017/12/20/【RNG-vs-SKT】弹幕的自然语言的初步分析/" title="【RNG vs SKT】弹幕的自然语言的初步分析">https://zhangslob.github.io/2017/12/20/【RNG-vs-SKT】弹幕的自然语言的初步分析/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://zhangslob.github.io/2017/12/20/【RNG-vs-SKT】弹幕的自然语言的初步分析/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({   
+          title: "",   
+          text: '复制成功',   
+          html: false,
+          timer: 500,   
+          showConfirmButton: false
+        });
+      });
+    }));  
+</script>
+
+
+
+        
+      </div>
+      <div>
+          <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/wechat-qcode.jpg" alt="小歪 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎关注公众号</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NLP/" rel="tag"> <i class="fa fa-tag"></i>NLP</a>
+          
+            <a href="/tags/自然语言处理/" rel="tag"> <i class="fa fa-tag"></i>自然语言处理</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/19/scrapy学习实例（四）采集淘宝数据并展示/" rel="next" title="scrapy学习实例（四）采集淘宝数据并展示">
+                <i class="fa fa-chevron-left"></i> scrapy学习实例（四）采集淘宝数据并展示
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/23/采集方案策略之App抓包/" rel="prev" title="采集方案策略之App抓包">
+                采集方案策略之App抓包 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="gitalk-container"></div>
+	  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    
+  </div>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1488291259&di=9b54b1ab9a4a02ec51e4344e960692d6&src=http://ni.ppsrc.com/aR24MryiGC7HFCEJTB-wgQ@640w_640h_75Q.jpeg"
+                alt="小歪" />
+            
+              <p class="site-author-name" itemprop="name">小歪</p>
+              <p class="site-description motion-element" itemprop="description">网络爬虫、数据分析、大数据!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/zhangslob" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:zhangslob@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/cuishite" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.quora.com/profile/Zhangslob" target="_blank" title="Quora">
+                    
+                      <i class="fa fa-fw fa-globe"></i>Quora</a>
+                </span>
+              
+            
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=33937527&auto=0&height=66"></iframe>
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://weiyanying.com/" title="Lovely Wakingup" target="_blank">Lovely Wakingup</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://erudev.github.io/" title="Lovely stone" target="_blank">Lovely stone</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据采集"><span class="nav-number">1.</span> <span class="nav-text">数据采集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#中文分词"><span class="nav-number">2.</span> <span class="nav-text">中文分词</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#情感分析"><span class="nav-number">3.</span> <span class="nav-text">情感分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特征提取"><span class="nav-number">4.</span> <span class="nav-text">特征提取</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特征选择"><span class="nav-number">5.</span> <span class="nav-text">特征选择</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算相似度："><span class="nav-number">5.1.</span> <span class="nav-text">计算相似度：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#To-Do"><span class="nav-number">6.</span> <span class="nav-text">To Do</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可参考资料"><span class="nav-number">7.</span> <span class="nav-text">可参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小歪</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+<br/>
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  一共来了<span id="busuanzi_value_site_uv"></span>位朋友啦
+</span>
+</div>
+<br/>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">嗨，全站共88.4k字</span>
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+  <script src="/js/src/md5.min.js"></script>
+
+  <script type="text/javascript">
+    var gitalk = new Gitalk({
+      clientID: '',
+      clientSecret: '',
+      repo: 'zhangslob.github.io',
+      owner: 'zhangslob',
+      admin: ['zhangslob'],
+      id: md5(location.pathname),
+      distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+  </script>
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("4NSyP8Gmw5KcjNYN4Yp4Fz3p-gzGzoHsz", "O9yE8heY4kQKGt6iwmRMfJnm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>
+

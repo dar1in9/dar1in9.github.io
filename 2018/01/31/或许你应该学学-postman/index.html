@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="爬虫,postman," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这是崔斯特的第二十八篇原创文章
+简单模拟请求的工具 (๑• . •๑)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="或许你应该学学 postman">
+<meta property="og:url" content="https://zhangslob.github.io/2018/01/31/或许你应该学学-postman/index.html">
+<meta property="og:site_name" content="小歪的博客">
+<meta property="og:description" content="这是崔斯特的第二十八篇原创文章
+简单模拟请求的工具 (๑• . •๑)">
+<meta property="og:image" content="https://i.imgur.com/7BTDQgq.png">
+<meta property="og:image" content="https://i.imgur.com/ZLG75Wm.png">
+<meta property="og:image" content="https://i.imgur.com/EzUmrVP.png">
+<meta property="og:image" content="https://i.imgur.com/QbUhi6y.png">
+<meta property="og:image" content="https://i.imgur.com/cJSncW7.png">
+<meta property="og:image" content="https://i.imgur.com/LCxVJMe.png">
+<meta property="og:image" content="https://i.imgur.com/dCZ5PAy.png">
+<meta property="og:updated_time" content="2018-01-31T15:42:34.859Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="或许你应该学学 postman">
+<meta name="twitter:description" content="这是崔斯特的第二十八篇原创文章
+简单模拟请求的工具 (๑• . •๑)">
+<meta name="twitter:image" content="https://i.imgur.com/7BTDQgq.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://zhangslob.github.io/2018/01/31/或许你应该学学-postman/"/>
+
+
+
+
+
+  <title>或许你应该学学 postman | 小歪的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3568775191c592732e51a6159a249e2c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+
+<div id="hexo-helper-live2d">
+  <canvas id="live2dcanvas" width="150" height="300"></canvas>
+</div>
+<style>
+  #live2dcanvas{
+    position: fixed;
+    width: 150px;
+    height: 300px;
+    opacity:0.7;
+    right: 0px;
+    z-index: 999;
+    pointer-events: none;
+    bottom: -20px;
+  }
+</style>
+<script type="text/javascript" src="/live2d/device.min.js"></script>
+<script type="text/javascript">
+const loadScript = function loadScript(c,b){var a=document.createElement("script");a.type="text/javascript";"undefined"!=typeof b&&(a.readyState?a.onreadystatechange=function(){if("loaded"==a.readyState||"complete"==a.readyState)a.onreadystatechange=null,b()}:a.onload=function(){b()});a.src=c;document.body.appendChild(a)};
+(function(){
+  if((typeof(device) != 'undefined') && (device.mobile())){
+    document.getElementById("live2dcanvas").style.width = '75px';
+    document.getElementById("live2dcanvas").style.height = '150px';
+  }else
+    if (typeof(device) === 'undefined') console.error('Cannot find current-device script.');
+  loadScript("/live2d/script.js", function(){loadlive2d("live2dcanvas", "/live2d/assets/koharu.model.json", 0.5);});
+})();
+</script>
+
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+		<a href="https://github.com/zhangslob"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小歪的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">人生苦短，我学Python</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zhangslob.github.io/2018/01/31/或许你应该学学-postman/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小歪">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1488291259&di=9b54b1ab9a4a02ec51e4344e960692d6&src=http://ni.ppsrc.com/aR24MryiGC7HFCEJTB-wgQ@640w_640h_75Q.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小歪的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">或许你应该学学 postman</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-31T22:59:36+08:00">
+                2018-01-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/爬虫/" itemprop="url" rel="index">
+                    <span itemprop="name">爬虫</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/01/31/或许你应该学学-postman/" class="leancloud_visitors" data-flag-title="或许你应该学学 postman">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 <span>℃</span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,291
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <pre><code>这是崔斯特的第二十八篇原创文章
+</code></pre><p>简单模拟请求的工具 (๑• . •๑)</p>
+<p><img src="https://i.imgur.com/7BTDQgq.png" alt=""></p>
+<a id="more"></a>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>最简单的方法就是直接在浏览器中复制 <code>Copy as cURL</code> ，然后把数据导入 postman，然后 <code>send</code> ，收工。</p>
+<p>我们这里拿 <a href="https://www.zhihu.com/" target="_blank" rel="external">知乎首页</a> 举例</p>
+<p><img src="https://i.imgur.com/ZLG75Wm.png" alt=""></p>
+<blockquote>
+<p>在对应的请求下复制 cURL</p>
+</blockquote>
+<p>打开 postman ， 点击左上角的 <code>Import</code> ， 选择<code>Paste Raw Text</code> ，最后 <code>Import</code>，点击 <code>send</code>发送请求</p>
+<p><img src="https://i.imgur.com/EzUmrVP.png" alt=""></p>
+<p>发送请求之后就可以查看了，如下图，标箭头的地方可以打开看更多。比如可以预览web界面，查看 <code>Headers</code> 信息，查看状态，复制代码。</p>
+<p><img src="https://i.imgur.com/QbUhi6y.png" alt=""></p>
+<p>同时可以打开 <code>Headers</code> ，用来调试，哪些是需要的，哪些不需要</p>
+<p><img src="https://i.imgur.com/cJSncW7.png" alt=""></p>
+<p>最方便的一点是，可以直接生成对应的编程语言，并复制，例如Python的requests方法：</p>
+<p><img src="https://i.imgur.com/LCxVJMe.png" alt=""></p>
+<p>好了，到这里 postman 的简单功能就说完了，他的全部功能当然不止这一点，更多的就去看 <a href="https://www.getpostman.com/docs/" target="_blank" rel="external">文档啦</a></p>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>在我的使用过程中，发现了 postman 的一些问题，如：导入错误，参数错误，请求失误。</p>
+<h2 id="导入错误"><a href="#导入错误" class="headerlink" title="导入错误"></a>导入错误</h2><p>例如知乎这个例子，如果我们复制的是 <code>Copy as cURL (cmd)</code> ，可能你会遇到下面的错误</p>
+<p><img src="https://i.imgur.com/dCZ5PAy.png" alt=""></p>
+<p>这个时候选用 <code>Copy as cURL (bush)</code> 就好了，具体原因是啥，我也不清楚。我在这里找到了别人的描述</p>
+<blockquote>
+<p>There is no difference between the two cURL command because there is a difference between ” and ‘.</p>
+</blockquote>
+<p>Refer : <a href="http://technote.thispage.me/index.php/2016/12/23/use-curl-to-get-the-same-results-as-a-web-browser/" target="_blank" rel="external">Use cURL to get the same results as a web browser</a></p>
+<h2 id="参数错误"><a href="#参数错误" class="headerlink" title="参数错误"></a>参数错误</h2><p>举个例子，今天在帮朋友查看 <a href="https://www.crunchbase.com/organization/500-startups/investments/investments_list" target="_blank" rel="external">这个网站</a> 的翻页，复制用postman打开， copy cURL 内容是</p>
+<figure class="highlight parser3"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="xml">curl "https://www.crunchbase.com/v4/data/entities/organizations/</span><span class="number">56e40</span><span class="xml">f50</span><span class="number">-97</span><span class="xml">c7</span><span class="number">-2</span><span class="xml">a77</span><span class="number">-255</span><span class="xml">d</span><span class="number">-1</span><span class="xml">d97d5f30646/overrides?field_ids=^%</span><span class="keyword">^5B</span><span class="xml">^%</span><span class="keyword">^22identifier</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">,^%</span><span class="keyword">^22layout_id</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">,^%</span><span class="keyword">^22facet_ids</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">,^%</span><span class="keyword">^22title</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">,^%</span><span class="keyword">^22short_description</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">,^%</span><span class="keyword">^22is_locked</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^5D</span><span class="xml">^&amp;card_ids=^%</span><span class="keyword">^5B</span><span class="xml">^%</span><span class="keyword">^22investments_list</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^5D</span><span class="xml">" -H "cookie: _ga=GA1</span><span class="number">.2</span><span class="xml"></span><span class="number">.35962729</span><span class="xml"></span><span class="number">.1517412509</span><span class="xml">; _gid=GA1</span><span class="number">.2</span><span class="xml"></span><span class="number">.2072770006</span><span class="xml"></span><span class="number">.1517412509</span><span class="xml">; _vdl=</span><span class="number">1</span><span class="xml">; _hp2_ses_props</span><span class="number">.973801186</span><span class="xml">=^%</span><span class="keyword">^7B</span><span class="xml">^%</span><span class="keyword">^22ts</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^3A1517412512548</span><span class="xml">^%</span><span class="keyword">^2C</span><span class="xml">^%</span><span class="keyword">^22d</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^3A</span><span class="xml">^%</span><span class="keyword">^22www.crunchbase.com</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^2C</span><span class="xml">^%</span><span class="keyword">^22h</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^3A</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^2Fsearch</span><span class="xml">^%</span><span class="keyword">^2Fprincipal.investors</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^7D</span><span class="xml">; __qca=P0</span><span class="number">-1969245879</span><span class="xml"></span><span class="number">-1517412512628</span><span class="xml">; D_IID=</span><span class="number">1</span><span class="xml">B7344D2</span><span class="number">-1</span><span class="xml">C8F</span><span class="number">-3327</span><span class="xml"></span><span class="number">-8607</span><span class="xml">-D786306444AE; D_UID=</span><span class="number">208</span><span class="xml">F925B</span><span class="number">-3</span><span class="xml">D1C</span><span class="number">-3491</span><span class="xml">-A532-C82375EE187D; D_ZID=</span><span class="number">497</span><span class="xml">DB63C</span><span class="number">-5101</span><span class="xml"></span><span class="number">-3</span><span class="xml">F49-BE35</span><span class="number">-1752</span><span class="xml">A80F8DDA; D_ZUID=D89FCBAA-BF79</span><span class="number">-340</span><span class="xml">C-BF55-B860768D0993; D_HID=</span><span class="number">57</span><span class="xml">B19D5F</span><span class="number">-5069</span><span class="xml"></span><span class="number">-3</span><span class="xml">A82</span><span class="number">-94</span><span class="xml">CB-D42821D1CD10; D_SID=</span><span class="number">123.120</span><span class="xml"></span><span class="number">.141</span><span class="xml"></span><span class="number">.63</span><span class="xml">:bXaeU41PWi5vyYIflFmiShQiK1qwq/nC4G9IljWo+</span><span class="number">6</span><span class="xml">A; AMCVS_6B25357E519160E40A490D44^%</span><span class="keyword">^40AdobeOrg</span><span class="xml">=</span><span class="number">1</span><span class="xml">; wcsid=KZbgLoopx4WnyMOW3F6pZ0H92JEzMrBd; hblid=cfw6lOKzm4FpCUou3F6pZ0H92JE6rBWB; s_cc=true; AMCV_6B25357E519160E40A490D44^%</span><span class="keyword">^40AdobeOrg</span><span class="xml">=</span><span class="number">1099438348</span><span class="xml">^%</span><span class="keyword">^7CMCMID</span><span class="xml">^%</span><span class="keyword">^7C05859477990281579603868663655860142263</span><span class="xml">^%</span><span class="keyword">^7CMCAAMLH-1518017313</span><span class="xml">^%</span><span class="keyword">^7C11</span><span class="xml">^%</span><span class="keyword">^7CMCAAMB-1518017313</span><span class="xml">^%</span><span class="keyword">^7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y</span><span class="xml">^%</span><span class="keyword">^7CMCOPTOUT-1517419713s</span><span class="xml">^%</span><span class="keyword">^7CNONE</span><span class="xml">^%</span><span class="keyword">^7CMCAID</span><span class="xml">^%</span><span class="keyword">^7CNONE</span><span class="xml">^%</span><span class="keyword">^7CMCSYNCSOP</span><span class="xml">^%</span><span class="keyword">^7C411-17570</span><span class="xml">^%</span><span class="keyword">^7CvVersion</span><span class="xml">^%</span><span class="keyword">^7C2.1.0</span><span class="xml">; _okdetect=^%</span><span class="keyword">^7B</span><span class="xml">^%</span><span class="keyword">^22token</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^3A</span><span class="xml">^%</span><span class="keyword">^2215174125149410</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^2C</span><span class="xml">^%</span><span class="keyword">^22proto</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^3A</span><span class="xml">^%</span><span class="keyword">^22https</span><span class="xml">^%</span><span class="keyword">^3A</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^2C</span><span class="xml">^%</span><span class="keyword">^22host</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^3A</span><span class="xml">^%</span><span class="keyword">^22www.crunchbase.com</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^7D</span><span class="xml">; olfsk=olfsk8562990481377502; _okbk=cd4^%</span><span class="keyword">^3Dtrue</span><span class="xml">^%</span><span class="keyword">^2Cvi5</span><span class="xml">^%</span><span class="keyword">^3D0</span><span class="xml">^%</span><span class="keyword">^2Cvi4</span><span class="xml">^%</span><span class="keyword">^3D1517412515909</span><span class="xml">^%</span><span class="keyword">^2Cvi3</span><span class="xml">^%</span><span class="keyword">^3Dactive</span><span class="xml">^%</span><span class="keyword">^2Cvi2</span><span class="xml">^%</span><span class="keyword">^3Dfalse</span><span class="xml">^%</span><span class="keyword">^2Cvi1</span><span class="xml">^%</span><span class="keyword">^3Dfalse</span><span class="xml">^%</span><span class="keyword">^2Ccd8</span><span class="xml">^%</span><span class="keyword">^3Dchat</span><span class="xml">^%</span><span class="keyword">^2Ccd6</span><span class="xml">^%</span><span class="keyword">^3D0</span><span class="xml">^%</span><span class="keyword">^2Ccd5</span><span class="xml">^%</span><span class="keyword">^3Daway</span><span class="xml">^%</span><span class="keyword">^2Ccd3</span><span class="xml">^%</span><span class="keyword">^3Dfalse</span><span class="xml">^%</span><span class="keyword">^2Ccd2</span><span class="xml">^%</span><span class="keyword">^3D0</span><span class="xml">^%</span><span class="keyword">^2Ccd1</span><span class="xml">^%</span><span class="keyword">^3D0</span><span class="xml">^%</span><span class="keyword">^2C</span><span class="xml">; _ok=</span><span class="number">1554</span><span class="xml"></span><span class="number">-355</span><span class="xml"></span><span class="number">-10</span><span class="xml"></span><span class="number">-6773</span><span class="xml">; _hp2_props</span><span class="number">.973801186</span><span class="xml">=^%</span><span class="keyword">^7B</span><span class="xml">^%</span><span class="keyword">^22Logged</span><span class="xml">^%</span><span class="keyword">^20In</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^3Afalse</span><span class="xml">^%</span><span class="keyword">^2C</span><span class="xml">^%</span><span class="keyword">^22Pro</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^3Afalse</span><span class="xml">^%</span><span class="keyword">^7D</span><span class="xml">; _hp2_id</span><span class="number">.973801186</span><span class="xml">=^%</span><span class="keyword">^7B</span><span class="xml">^%</span><span class="keyword">^22userId</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^3A</span><span class="xml">^%</span><span class="keyword">^228805156096536097</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^2C</span><span class="xml">^%</span><span class="keyword">^22pageviewId</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^3A</span><span class="xml">^%</span><span class="keyword">^221700148784936413</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^2C</span><span class="xml">^%</span><span class="keyword">^22sessionId</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^3A</span><span class="xml">^%</span><span class="keyword">^225929107734453151</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^2C</span><span class="xml">^%</span><span class="keyword">^22identity</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^3Anull</span><span class="xml">^%</span><span class="keyword">^2C</span><span class="xml">^%</span><span class="keyword">^22trackerVersion</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^3A</span><span class="xml">^%</span><span class="keyword">^223.0</span><span class="xml">^%</span><span class="keyword">^22</span><span class="xml">^%</span><span class="keyword">^7D</span><span class="xml">; _oklv=</span><span class="number">1517412548852</span><span class="xml">^%</span><span class="keyword">^2CKZbgLoopx4WnyMOW3F6pZ0H92JEzMrBd</span><span class="xml">; s_pers=^%</span><span class="keyword">^20s_nrgvo</span><span class="xml">^%</span><span class="keyword">^3DNew</span><span class="xml">^%</span><span class="keyword">^7C1580484574965</span><span class="xml">^%</span><span class="keyword">^3B</span><span class="xml">" -H "origin: https://www.crunchbase.com" -H "accept-encoding: gzip, deflate, br" -H "x-distil-ajax: dfdvfavtsysazfberrtudvwabwe" -H "user-agent: Mozilla/</span><span class="number">5.0</span><span class="xml"> (Windows NT </span><span class="number">6.1</span><span class="xml">; Win64; x64) AppleWebKit/</span><span class="number">537.36</span><span class="xml"> (KHTML, like Gecko) Chrome/</span><span class="number">63.0</span><span class="xml"></span><span class="number">.3239</span><span class="xml"></span><span class="number">.84</span><span class="xml"> Safari/</span><span class="number">537.36</span><span class="xml">" -H "content-type: application/json" -H "accept-language: zh-CN,zh;q=</span><span class="number">0.9</span><span class="xml">,en;q=</span><span class="number">0.8</span><span class="xml">" -H "accept: application/json, text/plain, */*" -H "referer: https://www.crunchbase.com/organization/</span><span class="number">500</span><span class="xml">-startups/investments/investments_list" -H "authority: www.crunchbase.com" -H "x-requested-with: XMLHttpRequest" --data-binary ^"^&#123;^</span></div><div class="line"></div><div class="line">  ^\^"card_lookups^\^": ^[^</div><div class="line"></div><div class="line">    ^&#123;^</div><div class="line"></div><div class="line">      ^\^"card_id^\^": ^\^"investments_list^\^",^</div><div class="line"></div><div class="line">      ^\^"limit^\^": <span class="number">100</span><span class="xml">,^</span></div><div class="line"></div><div class="line">      ^\^"after_id^\^": ^\^"<span class="number">07</span><span class="xml">a9c686</span><span class="number">-4590</span><span class="xml">-fa0f</span><span class="number">-3</span><span class="xml">ac4-fc7b898c0b7a^\^"^</span></div><div class="line"></div><div class="line">    ^&#125;^</div><div class="line"></div><div class="line">  ^]^</div><div class="line"></div><div class="line">^&#125;^" --compressed</div></pre></td></tr></table></figure>
+<p>导入之后，<code>send</code>，返回 400 错误。</p>
+<p>postman 转义的code是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> requests</div><div class="line"></div><div class="line">url = <span class="string">"https://www.crunchbase.com/v4/data/entities/organizations/56e40f50-97c7-2a77-255d-1d97d5f30646/overrides"</span></div><div class="line"></div><div class="line">querystring = &#123;<span class="string">"field_ids"</span>:<span class="string">"^%^5B^%^22identifier^%^22,^%^22layout_id^%^22,^%^22facet_ids^%^22,^%^22title^%^22,^%^22short_description^%^22,^%^22is_locked^%^22^%^5D^"</span>,<span class="string">"card_ids"</span>:<span class="string">"^%^5B^%^22investments_list^%^22^%^5D"</span>&#125;</div><div class="line"></div><div class="line">payload = <span class="string">"^^&#123;^\n\n  ^\\^card_lookups^^: ^[^\n\n    ^&#123;^\n\n      ^\\^card_id^^: ^\\^investments_list^^,^\n\n      ^\\^limit^^: 100,^\n\n      ^\\^after_id^^: ^\\^07a9c686-4590-fa0f-3ac4-fc7b898c0b7a^^^\n\n    ^&#125;^\n\n  ^]^\n\n^&#125;^"</span></div><div class="line">headers = &#123;</div><div class="line">    <span class="string">'cookie'</span>: <span class="string">"_ga=GA1.2.35962729.1517412509; _gid=GA1.2.2072770006.1517412509; _vdl=1; _hp2_ses_props.973801186=^%^7B^%^22ts^%^22^%^3A1517412512548^%^2C^%^22d^%^22^%^3A^%^22www.crunchbase.com^%^22^%^2C^%^22h^%^22^%^3A^%^22^%^2Fsearch^%^2Fprincipal.investors^%^22^%^7D; __qca=P0-1969245879-1517412512628; D_IID=1B7344D2-1C8F-3327-8607-D786306444AE; D_UID=208F925B-3D1C-3491-A532-C82375EE187D; D_ZID=497DB63C-5101-3F49-BE35-1752A80F8DDA; D_ZUID=D89FCBAA-BF79-340C-BF55-B860768D0993; D_HID=57B19D5F-5069-3A82-94CB-D42821D1CD10; D_SID=123.120.141.63:bXaeU41PWi5vyYIflFmiShQiK1qwq/nC4G9IljWo+6A; AMCVS_6B25357E519160E40A490D44^%^40AdobeOrg=1; wcsid=KZbgLoopx4WnyMOW3F6pZ0H92JEzMrBd; hblid=cfw6lOKzm4FpCUou3F6pZ0H92JE6rBWB; s_cc=true; AMCV_6B25357E519160E40A490D44^%^40AdobeOrg=1099438348^%^7CMCMID^%^7C05859477990281579603868663655860142263^%^7CMCAAMLH-1518017313^%^7C11^%^7CMCAAMB-1518017313^%^7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y^%^7CMCOPTOUT-1517419713s^%^7CNONE^%^7CMCAID^%^7CNONE^%^7CMCSYNCSOP^%^7C411-17570^%^7CvVersion^%^7C2.1.0; _okdetect=^%^7B^%^22token^%^22^%^3A^%^2215174125149410^%^22^%^2C^%^22proto^%^22^%^3A^%^22https^%^3A^%^22^%^2C^%^22host^%^22^%^3A^%^22www.crunchbase.com^%^22^%^7D; olfsk=olfsk8562990481377502; _okbk=cd4^%^3Dtrue^%^2Cvi5^%^3D0^%^2Cvi4^%^3D1517412515909^%^2Cvi3^%^3Dactive^%^2Cvi2^%^3Dfalse^%^2Cvi1^%^3Dfalse^%^2Ccd8^%^3Dchat^%^2Ccd6^%^3D0^%^2Ccd5^%^3Daway^%^2Ccd3^%^3Dfalse^%^2Ccd2^%^3D0^%^2Ccd1^%^3D0^%^2C; _ok=1554-355-10-6773; _hp2_props.973801186=^%^7B^%^22Logged^%^20In^%^22^%^3Afalse^%^2C^%^22Pro^%^22^%^3Afalse^%^7D; _hp2_id.973801186=^%^7B^%^22userId^%^22^%^3A^%^228805156096536097^%^22^%^2C^%^22pageviewId^%^22^%^3A^%^221700148784936413^%^22^%^2C^%^22sessionId^%^22^%^3A^%^225929107734453151^%^22^%^2C^%^22identity^%^22^%^3Anull^%^2C^%^22trackerVersion^%^22^%^3A^%^223.0^%^22^%^7D; _oklv=1517412548852^%^2CKZbgLoopx4WnyMOW3F6pZ0H92JEzMrBd; s_pers=^%^20s_nrgvo^%^3DNew^%^7C1580484574965^%^3B"</span>,</div><div class="line">    <span class="string">'origin'</span>: <span class="string">"https://www.crunchbase.com"</span>,</div><div class="line">    <span class="string">'accept-encoding'</span>: <span class="string">"gzip, deflate, br"</span>,</div><div class="line">    <span class="string">'x-distil-ajax'</span>: <span class="string">"dfdvfavtsysazfberrtudvwabwe"</span>,</div><div class="line">    <span class="string">'user-agent'</span>: <span class="string">"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36"</span>,</div><div class="line">    <span class="string">'content-type'</span>: <span class="string">"application/json"</span>,</div><div class="line">    <span class="string">'accept-language'</span>: <span class="string">"zh-CN,zh;q=0.9,en;q=0.8"</span>,</div><div class="line">    <span class="string">'accept'</span>: <span class="string">"application/json, text/plain, */*"</span>,</div><div class="line">    <span class="string">'referer'</span>: <span class="string">"https://www.crunchbase.com/organization/500-startups/investments/investments_list"</span>,</div><div class="line">    <span class="string">'authority'</span>: <span class="string">"www.crunchbase.com"</span>,</div><div class="line">    <span class="string">'x-requested-with'</span>: <span class="string">"XMLHttpRequest"</span>,</div><div class="line">    <span class="string">'cache-control'</span>: <span class="string">"no-cache"</span>,</div><div class="line">    <span class="string">'postman-token'</span>: <span class="string">"1df3b2b6-b682-edf7-4804-572ac5a03420"</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">response = requests.request(<span class="string">"POST"</span>, url, data=payload, headers=headers, params=querystring)</div><div class="line"></div><div class="line">print(response.text)</div></pre></td></tr></table></figure>
+<p>可以看到 加入了大量的 <code>^</code> 符号，这个在Python中是运算符<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">^	按位异或运算符：当两对应的二进位相异时，结果为<span class="number">1</span>	(a ^ b) 输出结果 <span class="number">49</span> ，二进制解释： <span class="number">0011</span> <span class="number">0001</span></div></pre></td></tr></table></figure></p>
+<p>这也是 postman 的一个问题</p>
+<h2 id="请求失误"><a href="#请求失误" class="headerlink" title="请求失误"></a>请求失误</h2><p>这个问题，我也不是很懂，有的请求 postman 返回错误，但是复制代码到 Python 环境中运行是可以获得数据的，所以最好是多次验证。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/2018/01/31/或许你应该学学-postman/">或许你应该学学 postman</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 小歪 的个人博客">小歪</a></p>
+  <p><span>发布时间:</span>2018年01月31日 - 22:01</p>
+  <p><span>最后更新:</span>2018年01月31日 - 23:01</p>
+  <p><span>原始链接:</span><a href="/2018/01/31/或许你应该学学-postman/" title="或许你应该学学 postman">https://zhangslob.github.io/2018/01/31/或许你应该学学-postman/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://zhangslob.github.io/2018/01/31/或许你应该学学-postman/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({   
+          title: "",   
+          text: '复制成功',   
+          html: false,
+          timer: 500,   
+          showConfirmButton: false
+        });
+      });
+    }));  
+</script>
+
+
+
+        
+      </div>
+      <div>
+          <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/wechat-qcode.jpg" alt="小歪 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎关注公众号</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/爬虫/" rel="tag"> <i class="fa fa-tag"></i>爬虫</a>
+          
+            <a href="/tags/postman/" rel="tag"> <i class="fa fa-tag"></i>postman</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/30/有了她，谁敢阻止我学习/" rel="next" title="有了她，谁敢阻止我学习">
+                <i class="fa fa-chevron-left"></i> 有了她，谁敢阻止我学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/02/为什么不推荐Selenium写爬虫/" rel="prev" title="为什么不推荐Selenium写爬虫">
+                为什么不推荐Selenium写爬虫 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="gitalk-container"></div>
+	  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    
+  </div>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1488291259&di=9b54b1ab9a4a02ec51e4344e960692d6&src=http://ni.ppsrc.com/aR24MryiGC7HFCEJTB-wgQ@640w_640h_75Q.jpeg"
+                alt="小歪" />
+            
+              <p class="site-author-name" itemprop="name">小歪</p>
+              <p class="site-description motion-element" itemprop="description">网络爬虫、数据分析、大数据!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/zhangslob" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:zhangslob@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/cuishite" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.quora.com/profile/Zhangslob" target="_blank" title="Quora">
+                    
+                      <i class="fa fa-fw fa-globe"></i>Quora</a>
+                </span>
+              
+            
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=33937527&auto=0&height=66"></iframe>
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://weiyanying.com/" title="Lovely Wakingup" target="_blank">Lovely Wakingup</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://erudev.github.io/" title="Lovely stone" target="_blank">Lovely stone</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">1.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#导入错误"><span class="nav-number">2.1.</span> <span class="nav-text">导入错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数错误"><span class="nav-number">2.2.</span> <span class="nav-text">参数错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请求失误"><span class="nav-number">2.3.</span> <span class="nav-text">请求失误</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小歪</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+<br/>
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  一共来了<span id="busuanzi_value_site_uv"></span>位朋友啦
+</span>
+</div>
+<br/>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">嗨，全站共88.4k字</span>
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+  <script src="/js/src/md5.min.js"></script>
+
+  <script type="text/javascript">
+    var gitalk = new Gitalk({
+      clientID: '',
+      clientSecret: '',
+      repo: 'zhangslob.github.io',
+      owner: 'zhangslob',
+      admin: ['zhangslob'],
+      id: md5(location.pathname),
+      distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+  </script>
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("4NSyP8Gmw5KcjNYN4Yp4Fz3p-gzGzoHsz", "O9yE8heY4kQKGt6iwmRMfJnm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>
+
