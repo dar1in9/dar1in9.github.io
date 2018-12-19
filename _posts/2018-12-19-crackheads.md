@@ -7,9 +7,7 @@ tags: [逆向]
 
 ## CrackHead
 
-
 ### 过程分析
-
 1.首先输入假码搜集信息，似乎没有反应。
 
 ![img](/assets/images/crackhead1.png)
@@ -23,6 +21,11 @@ tags: [逆向]
 ![img](/assets/images/crackhead3.png)
 
 4.发现这里有我们的假码,详见注释。
+
+
+
+
+
 
 ### CrackHead‘s  Keygen
 
