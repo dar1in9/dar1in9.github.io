@@ -1,0 +1,93 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+title: 甲壳虫爱上了夏天
+name: Wayne Chu
+email: waynechu1996@gmail.com
+location: Jiangxi, China
+company: Henan University
+company_url: http://www.henu.edu.cn/
+github_url: https://github.com/Z-Beatles
+description: This is a personal website of Wayne Chu | 个人博客，用于记录学习笔记
+favicon: favicon.png
+repository: Z-Beatles/Z-Beatles.github.io
+
+# The base hostname & protocol for your site
+# For local test, please use http://localhost:4000
+# For production, use your github page url. ex. http://dongchuan.github.io
+url: https://waynechu.cn
+
+## Gem
+gems:
+  - jekyll-paginate
+  - jekyll-geo-pattern
+  - rouge
+  - kramdown
+  - jekyll-github-metadata
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+lsi:         false
+excerpt_separator: "\n\n"
+
+source:      .
+destination: ./_site
+
+quiet:    false
+defaults: []
+
+kramdown:
+  input: GFM
+  enable_coderay: true
+
+# Disque
+disque: z-beatles.disqus.com
+
+# Pagination
+paginate: 10
+paginate_path: 'page:num'
+
+# Navigation. If you do not like these modules, just remove them :D
+navs:
+  -
+    href: /
+    label: Home
+
+  -
+    href: /open-source
+    label: Open-Source
+
+  -
+    href: /blog
+    label: Blog
+
+  -
+    href: /bookmark
+    label: Bookmark
+
+  -
+    href: /about
+    label: About
+
+# Sidebar to show popular repo
+side_bar_repo_limit: 5 # Number of repos to show
+
+# Google Analytics
+analytics :
+  provider : google
+  google :
+      tracking_id : 'tracking_id'  # ex. UA-72165600-X
+
+
+# For about.html. Fell free to create your own!
+skill_software_keywords: [Java, Python, Android, Git, Linux Shell, Design Patterns, DevOps, Docker, JMeter]
+skill_dba_keywords: [MySQL, PostgreSQL, Oracle, SQL Server, SQLite, Redis Sentinel, Redis Cluster]
+skill_j2ee_keywords: [Spring, Spring MVC, MyBatis, JSP, RESTful Api, Spring Boot, Motan, Dubbo, Spring Data *, Spring Security, Spring Sociol]
+skill_web_keywords: [HTML, CSS, JS, JQuery, Ajax, Boostrap, Vue.js]
+skill_mobile_app_keywords: [Android, WebApp]
