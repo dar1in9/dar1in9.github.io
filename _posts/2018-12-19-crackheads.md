@@ -1,11 +1,28 @@
 ---
 layout: post
-title: CrackHead
+title: 简单的keygenme
 category: 逆向
 tags: [逆向]
 ---
 
 ## CrackHead
+
+
+### 过程分析
+
+1.首先输入假码搜集信息，似乎没有反应。
+
+![img](/assets/images/crackhead1.png)
+
+2.载入x32dbg，看看调用，发现这个。
+
+![img](/assets/images/crackhead2.png)
+
+3.来到这里，发现下面有成功弹窗。判断此为关键call，F7跟进。
+
+![img](/assets/images/crackhead3.png)
+
+4.发现这里有我们的假码,详见注释。
 
 ### CrackHead‘s  Keygen
 
@@ -43,18 +60,4 @@ int main(int argc,char **argv)
 } 
 ```
 
-### 过程分析
 
-1.首先输入假码搜集信息，似乎没有反应。
-
-![img](/assets/images/crackhead1.png)
-
-2.载入x32dbg，看看调用，发现这个。
-
-![img](/assets/images/crackhead2.png)
-
-3.来到这里，发现下面有成功弹窗。判断此为关键call，F7跟进。
-
-![img](/assets/images/crackhead3.png)
-
-4.发现这里有我们的假码,详见注释。
