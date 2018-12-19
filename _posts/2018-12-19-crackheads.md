@@ -47,14 +47,14 @@ int main(int argc,char **argv)
 
 1.首先输入假码搜集信息，似乎没有反应。
 
-![img](/assert/images/crackhead1.png)
+![img](/asserts/images/crackhead1.png)
 
 2.载入x32dbg，看看调用，发现这个。
 
-![img](/assert/images/crackhead2.png)
+![img](/asserts/images/crackhead2.png)
 
 3.来到这里，发现下面有成功弹窗。判断此为关键call，F7跟进。
 
-![img](/assert/images/crackhead3.png)
+![img](/asserts/images/crackhead3.png)
 
 4.发现这里有我们的假码。
