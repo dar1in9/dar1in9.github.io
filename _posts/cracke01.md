@@ -1,0 +1,40 @@
+---
+layout: post
+title: crackme01
+category: 逆向
+tags: [逆向]
+---
+
+## CrackHead
+
+### 过程分析
+1.首先运行程序，发现有两个难度，先看serial。
+
+2.载入x32dbg，搜索字符串，段首下断。
+
+![img](/assets/images/2019-1-29-crackme01/cr1_1.png)
+（爆破jne即可）
+
+3.跟进jne上方的call，发现serial固定，为 Hello Dude!
+
+![img](/assets/images/2019-1-29-crackme01/cr1_2.png)
+
+4.再看第一个，同样找字符串，段首下断。
+
+![img](/assets/images/2019-1-29-crackme01/cr1_3.png)
+
+如图，推测注册码为CW-*****-CRACKED，数字的算法为name[0]\*0x29\*2。
+
+### CRACKME01‘s  Keygen
+
+```python
+#encoding=utf-8
+
+name = input("pls,input ur name:")
+v1 = ord(name[0])
+key = v1*41*2
+print ('your serial is:CW-%4d-CRACKED'%(key))
+
+```
+
+
