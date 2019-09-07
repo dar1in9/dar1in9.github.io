@@ -47,7 +47,7 @@ kramdown:
   enable_coderay: true
 
 # Disque
-disque: z-beatles.disqus.com
+disque: dar1in9.disqus.com
 
 # Pagination
 paginate: 10
