@@ -1,3 +1,12 @@
+---
+layout: post
+title: prctl&pwnable_orw
+category: pwn
+tags: [pwn]
+---
+
+
+
 ## 前言
 写着写着。。。发现有师傅已经介绍了seccomp的[相关内容](https://bbs.xdsec.org/d/567-seccomp-2019bytectf-vip)。
 
