@@ -7,8 +7,6 @@ tags: [pwn]
 
 
 
-## 前言
-写着写着。。。发现有师傅已经介绍了seccomp的[相关内容](https://bbs.xdsec.org/d/567-seccomp-2019bytectf-vip)。
 
 ## 相关工具
 seccomp-tools https://github.com/david942j/seccomp-tools
