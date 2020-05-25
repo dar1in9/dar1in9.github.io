@@ -7,6 +7,9 @@ tags: [pwn]
 
 ### Oj_0
 
+先用printf泄露栈结构，查libc版本，onegadget一把梭。
+
+
 ```python
 from pwn import *
 context.log_level = 'debug'
@@ -33,6 +36,10 @@ p.interactive()
 
 
 ### OJ_1
+
+同样的，onegadget，用汇编写。
+附上链接
+[不用括号输出Hello,World](https://jlkl.github.io/2017/10/14/%E6%9C%89%E8%B6%A3%E7%9A%84%E2%80%9CHello%20World%E2%80%9D/)
 
 ```python
 from pwn import *
@@ -70,6 +77,8 @@ p.interactive()
 
 ### Memory_Monster_I
 
+劫持got表，触发canary。
+
 ```python
 from pwn import *
 context.log_level = 'debug'
@@ -94,6 +103,8 @@ p.send(payload)
 p.interactive()
 ```
 ### Memory_Monster_II
+
+改写_fini_array[1]为main，_fini_array[0]为__libc_csu_fini,实现多次写。
 
 ```python
 from pwn import *
@@ -143,6 +154,8 @@ sh.interactive()
 
 
 ### Memory_Monster_III
+
+同Memory_Monster_II，找个地方写入'/bin/sh\x00'
 
 ```python
 from pwn import *
