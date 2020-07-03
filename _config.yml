@@ -98,4 +98,6 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type: ''
+  type: git
+  repo: git@github.com:dar1in9/dar1in9.github.io.git
+  branch: master
