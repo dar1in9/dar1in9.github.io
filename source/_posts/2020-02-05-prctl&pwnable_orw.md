@@ -3,7 +3,7 @@ layout: post
 title: prctl&pwnable_orw
 categories: pwn
 tags: [pwn]
-description: 11
+description: prtcl
 date: 2020-02-25
 ---
 

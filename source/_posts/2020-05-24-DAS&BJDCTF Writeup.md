@@ -3,7 +3,7 @@ layout: post
 title: DAS&BJDCTF Writeup
 categories: pwn
 tags: [pwn]
-description: 11
+description: 安恒6月赛
 date: 2020-05-24
 ---
 
