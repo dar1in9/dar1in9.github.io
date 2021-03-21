@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="动手！首先登录、抓包，查看所提交的参数,password被加密并经过base64编码。 F12审查元素，查看登陆表单以及所绑定事件。 将password和pwdDefaultEncryptSalt传入_etd2函数，pwdDefaultEncryptSalt（下文中简称key）可在表单中获取。 123456789101112131415161718192021function doLogin()">
+<meta property="og:type" content="article">
+<meta property="og:title" content="某大学登陆流程分析">
+<meta property="og:url" content="http://darin9.top/2021/03/05/auth/index.html">
+<meta property="og:site_name" content="b1ank&#39;s blog">
+<meta property="og:description" content="动手！首先登录、抓包，查看所提交的参数,password被加密并经过base64编码。 F12审查元素，查看登陆表单以及所绑定事件。 将password和pwdDefaultEncryptSalt传入_etd2函数，pwdDefaultEncryptSalt（下文中简称key）可在表单中获取。 123456789101112131415161718192021function doLogin()">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://darin9.top/2021/03/05/img/auth/1.jpg">
+<meta property="og:image" content="http://darin9.top/2021/03/05/img/auth/2.jpg">
+<meta property="og:image" content="http://darin9.top/2021/03/05/img/auth/3.jpg">
+<meta property="og:image" content="http://darin9.top/2021/03/05/img/auth/cbc_decryption.png">
+<meta property="article:published_time" content="2021-03-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-21T07:01:12.347Z">
+<meta property="article:author" content="b1ank">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://darin9.top/2021/03/05/img/auth/1.jpg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>某大学登陆流程分析</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/dar1in9">Projects</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://darin9.top/2021/03/05/auth/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://darin9.top/2021/03/05/auth/&text=某大学登陆流程分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://darin9.top/2021/03/05/auth/&title=某大学登陆流程分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://darin9.top/2021/03/05/auth/&is_video=false&description=某大学登陆流程分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=某大学登陆流程分析&body=Check out this article: http://darin9.top/2021/03/05/auth/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://darin9.top/2021/03/05/auth/&title=某大学登陆流程分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://darin9.top/2021/03/05/auth/&title=某大学登陆流程分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://darin9.top/2021/03/05/auth/&title=某大学登陆流程分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://darin9.top/2021/03/05/auth/&title=某大学登陆流程分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://darin9.top/2021/03/05/auth/&name=某大学登陆流程分析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://darin9.top/2021/03/05/auth/&t=某大学登陆流程分析"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%89%8B%EF%BC%81"><span class="toc-number">1.</span> <span class="toc-text">动手！</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E9%99%86%E5%A4%8D%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">登陆复现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CBC%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">CBC模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0%E4%BB%A3%E7%A0%81"><span class="toc-number">2.2.</span> <span class="toc-text">复现代码</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        某大学登陆流程分析
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">b1ank</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-03-04T16:00:00.000Z" itemprop="datePublished">2021-03-05</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="动手！"><a href="#动手！" class="headerlink" title="动手！"></a>动手！</h3><p>首先登录、抓包，查看所提交的参数,<code>password</code>被加密并经过base64编码。<br><img src="../img/auth/1.jpg" alt="img"></p>
+<p>F12审查元素，查看登陆表单以及所绑定事件。<br><img src="../img/auth/2.jpg" alt="img"></p>
+<p>将<code>password</code>和<code>pwdDefaultEncryptSalt</code>传入<code>_etd2</code>函数，<code>pwdDefaultEncryptSalt</code>（下文中简称key）可在表单中获取。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">doLogin</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> username = casLoginForm.find(<span class="string">&quot;#username&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> password = casLoginForm.find(<span class="string">&quot;#password&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!checkRequired(username, <span class="string">&quot;usernameError&quot;</span>)) &#123;</span><br><span class="line">        username.focus();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!checkRequired(password, <span class="string">&quot;passwordError&quot;</span>)) &#123;</span><br><span class="line">        password.focus();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> captchaResponse = casLoginForm.find(<span class="string">&quot;#captchaResponse&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!checkRequired(captchaResponse, <span class="string">&quot;cpatchaError&quot;</span>)) &#123;</span><br><span class="line">        captchaResponse.focus();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    _etd2(password.val(), casLoginForm.find(<span class="string">&quot;#pwdDefaultEncryptSalt&quot;</span>).val());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将<code>password</code>和<code>key</code>传入<code>encryptAES</code>,可知加密算法为AES。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_etd2</span>(<span class="params">_p0, _p1</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> _p2 = encryptAES(_p0, _p1);</span><br><span class="line">        $(<span class="string">&quot;#casLoginForm&quot;</span>).find(<span class="string">&quot;#passwordEncrypt&quot;</span>).val(_p2);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">        $(<span class="string">&quot;#casLoginForm&quot;</span>).find(<span class="string">&quot;#passwordEncrypt&quot;</span>).val(_p0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>_rds</code>函数为产生指定长度随机字符串，<code>encryptAES</code>函数将64位的随机字符串拼接上<code>password</code>作为第一个参数，<code>key</code>和16位随机字符串作为后两个参数传入<code>_gas</code>函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">encryptAES</span>(<span class="params">data, _p1</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!_p1) &#123;</span><br><span class="line">        <span class="keyword">return</span> data;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> encrypted = _gas(_rds(<span class="number">64</span>) + data, _p1, _rds(<span class="number">16</span>));</span><br><span class="line">    <span class="keyword">return</span> encrypted;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> $_chars = <span class="string">&#x27;ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678&#x27;</span>;</span><br><span class="line"><span class="keyword">var</span> _chars_len = $_chars.length;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_rds</span>(<span class="params">len</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> retStr = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">        retStr += $_chars.charAt(<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * _chars_len));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> retStr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可见，加密算法为AES，待加密字符为64位的随机数拼接上<code>password</code>，密钥为<code>key</code>，初始向量IV为16位随机字符串，CBC模式，填充方式为PKCS7。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_gas</span>(<span class="params">data, key0, iv0</span>) </span>&#123;</span><br><span class="line">    key0 = key0.replace(<span class="regexp">/(^\s+)|(\s+$)/g</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> key = CryptoJS.enc.Utf8.parse(key0);</span><br><span class="line">    <span class="keyword">var</span> iv = CryptoJS.enc.Utf8.parse(iv0);</span><br><span class="line">    <span class="keyword">var</span> encrypted = CryptoJS.AES.encrypt(data, key, &#123;</span><br><span class="line">        iv: iv,</span><br><span class="line">        mode: CryptoJS.mode.CBC,</span><br><span class="line">        padding: CryptoJS.pad.Pkcs7</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> encrypted.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>base64编码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> u = CryptoJS</span><br><span class="line">      , p = u.lib.WordArray;</span><br><span class="line">    u.enc.Base64 = &#123;</span><br><span class="line">        stringify: <span class="function"><span class="keyword">function</span>(<span class="params">d</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> l = d.words</span><br><span class="line">              , p = d.sigBytes</span><br><span class="line">              , t = <span class="built_in">this</span>._map;</span><br><span class="line">            d.clamp();</span><br><span class="line">            d = [];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> r = <span class="number">0</span>; r &lt; p; r += <span class="number">3</span>)</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">var</span> w = (l[r &gt;&gt;&gt; <span class="number">2</span>] &gt;&gt;&gt; <span class="number">24</span> - <span class="number">8</span> * (r % <span class="number">4</span>) &amp; <span class="number">255</span>) &lt;&lt; <span class="number">16</span> | (l[r + <span class="number">1</span> &gt;&gt;&gt; <span class="number">2</span>] &gt;&gt;&gt; <span class="number">24</span> - <span class="number">8</span> * ((r + <span class="number">1</span>) % <span class="number">4</span>) &amp; <span class="number">255</span>) &lt;&lt; <span class="number">8</span> | l[r + <span class="number">2</span> &gt;&gt;&gt; <span class="number">2</span>] &gt;&gt;&gt; <span class="number">24</span> - <span class="number">8</span> * ((r + <span class="number">2</span>) % <span class="number">4</span>) &amp; <span class="number">255</span>, v = <span class="number">0</span>; <span class="number">4</span> &gt; v &amp;&amp; r + <span class="number">0.75</span> * v &lt; p; v++)</span><br><span class="line">                    d.push(t.charAt(w &gt;&gt;&gt; <span class="number">6</span> * (<span class="number">3</span> - v) &amp; <span class="number">63</span>));</span><br><span class="line">            <span class="keyword">if</span> (l = t.charAt(<span class="number">64</span>))</span><br><span class="line">                <span class="keyword">for</span> (; d.length % <span class="number">4</span>; )</span><br><span class="line">                    d.push(l);</span><br><span class="line">            <span class="keyword">return</span> d.join(<span class="string">&quot;&quot;</span>)</span><br><span class="line">        &#125;,</span><br><span class="line">        parse: <span class="function"><span class="keyword">function</span>(<span class="params">d</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> l = d.length</span><br><span class="line">              , s = <span class="built_in">this</span>._map</span><br><span class="line">              , t = s.charAt(<span class="number">64</span>);</span><br><span class="line">            t &amp;&amp; (t = d.indexOf(t),</span><br><span class="line">            -<span class="number">1</span> != t &amp;&amp; (l = t));</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> t = [], r = <span class="number">0</span>, w = <span class="number">0</span>; w &lt; l; w++)</span><br><span class="line">                <span class="keyword">if</span> (w % <span class="number">4</span>) &#123;</span><br><span class="line">                    <span class="keyword">var</span> v = s.indexOf(d.charAt(w - <span class="number">1</span>)) &lt;&lt; <span class="number">2</span> * (w % <span class="number">4</span>)</span><br><span class="line">                      , b = s.indexOf(d.charAt(w)) &gt;&gt;&gt; <span class="number">6</span> - <span class="number">2</span> * (w % <span class="number">4</span>);</span><br><span class="line">                    t[r &gt;&gt;&gt; <span class="number">2</span>] |= (v | b) &lt;&lt; <span class="number">24</span> - <span class="number">8</span> * (r % <span class="number">4</span>);</span><br><span class="line">                    r++</span><br><span class="line">                &#125;</span><br><span class="line">            <span class="keyword">return</span> p.create(t, r)</span><br><span class="line">        &#125;,</span><br><span class="line">        _map: <span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="登陆复现"><a href="#登陆复现" class="headerlink" title="登陆复现"></a>登陆复现</h3><p>解密验证，发现末尾为<code>password</code>。（推荐工具：cyberchef）<br><img src="../img/auth/3.jpg" alt="img"></p>
+<h4 id="CBC模式"><a href="#CBC模式" class="headerlink" title="CBC模式"></a>CBC模式</h4><p><img src="../img/auth/cbc_decryption.png" alt="img"><br>可见，初始向量的不同只影响第一块的明文，所以初始向量可自定义。</p>
+<h4 id="复现代码"><a href="#复现代码" class="headerlink" title="复现代码"></a>复现代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="comment">#随机字符串产生</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getRandomN</span>(<span class="params">N</span>):</span></span><br><span class="line">    s = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">        s += <span class="built_in">str</span>(random.randint(<span class="number">0</span>,<span class="number">9</span>))</span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line"></span><br><span class="line"><span class="comment">#PKCS7填充</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pad</span>(<span class="params">data</span>):</span></span><br><span class="line">    bs = AES.block_size</span><br><span class="line">    data += (bs - <span class="built_in">len</span>(data)%bs) * <span class="built_in">chr</span>(bs - <span class="built_in">len</span>(data)%bs)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"><span class="comment">#加密函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encrypt</span>(<span class="params">data,key,iv</span>):</span></span><br><span class="line">    iv = iv.encode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    cipher = AES.new(key.encode(<span class="string">&#x27;utf-8&#x27;</span>),AES.MODE_CBC,iv)</span><br><span class="line">    data = cipher.encrypt(pad(data).encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"><span class="comment">#解密函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decrypt</span>(<span class="params">data,key</span>):</span></span><br><span class="line">    iv = <span class="string">&#x27;0000000000000000&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    cipher = AES.new(key,AES.MODE_CBC,iv)</span><br><span class="line">    data = cipher.decrypt(data)</span><br><span class="line">    <span class="keyword">return</span> (data[<span class="number">64</span>:])</span><br><span class="line"></span><br><span class="line"><span class="comment">#base64编码</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getPwd</span>(<span class="params">data,key</span>):</span></span><br><span class="line">    iv = getRandomN(<span class="number">16</span>)</span><br><span class="line">    data  = getRandomN(<span class="number">64</span>) + data</span><br><span class="line">    <span class="keyword">return</span> (base64.b64encode(encrypt(data,key,iv)).decode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#登陆函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span>(<span class="params">username,password</span>):</span></span><br><span class="line">    url = <span class="string">&#x27;https://xxx.edu.cn&#x27;</span></span><br><span class="line">    r = ses.get(url,headers=header)</span><br><span class="line">    text = r.text</span><br><span class="line">    l = re.findall(<span class="string">r&#x27;&lt;input type=\&quot;hidden\&quot; .*?=\&quot;.*?\&quot; value=\&quot;(.*?)\&quot;&#x27;</span>,text)</span><br><span class="line">    password = getPwd(password,l[<span class="number">5</span>])</span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&#x27;username&#x27;</span>:username,</span><br><span class="line">        <span class="string">&#x27;password&#x27;</span>:password,</span><br><span class="line">        <span class="string">&#x27;lt&#x27;</span>:l[<span class="number">0</span>],</span><br><span class="line">        <span class="string">&#x27;dllt&#x27;</span>:l[<span class="number">1</span>],</span><br><span class="line">        <span class="string">&#x27;execution&#x27;</span>:l[<span class="number">2</span>],</span><br><span class="line">        <span class="string">&#x27;_eventId&#x27;</span>:l[<span class="number">3</span>],</span><br><span class="line">        <span class="string">&#x27;rmShown&#x27;</span>:l[<span class="number">4</span>],</span><br><span class="line">    &#125;</span><br><span class="line">    r = ses.post(url,data=data,allow_redirects=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">header = &#123;</span><br><span class="line">    <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36&#x27;</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+        
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+            <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+            <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+            <div id="gitalk-container"></div>
+            <script type="text/javascript">
+                var gitalk = new Gitalk({
+                    clientID: '865c501b39a0463d23cc',
+                    clientSecret: 'fb46ad89ef3857a05f0255f9d3c1f67e0929cbe7',
+                    id: md5(window.location.pathname),
+                    repo: 'dar1in9.github.io',
+                    owner: 'dar1in9',
+                    admin: 'dar1in9',
+                    distractionFreeMode: ''
+                })
+                gitalk.render('gitalk-container')
+            </script>
+            
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/dar1in9">Projects</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%89%8B%EF%BC%81"><span class="toc-number">1.</span> <span class="toc-text">动手！</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E9%99%86%E5%A4%8D%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">登陆复现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CBC%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">CBC模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0%E4%BB%A3%E7%A0%81"><span class="toc-number">2.2.</span> <span class="toc-text">复现代码</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://darin9.top/2021/03/05/auth/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://darin9.top/2021/03/05/auth/&text=某大学登陆流程分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://darin9.top/2021/03/05/auth/&title=某大学登陆流程分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://darin9.top/2021/03/05/auth/&is_video=false&description=某大学登陆流程分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=某大学登陆流程分析&body=Check out this article: http://darin9.top/2021/03/05/auth/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://darin9.top/2021/03/05/auth/&title=某大学登陆流程分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://darin9.top/2021/03/05/auth/&title=某大学登陆流程分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://darin9.top/2021/03/05/auth/&title=某大学登陆流程分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://darin9.top/2021/03/05/auth/&title=某大学登陆流程分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://darin9.top/2021/03/05/auth/&name=某大学登陆流程分析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://darin9.top/2021/03/05/auth/&t=某大学登陆流程分析"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2018-2021
+    b1ank
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/dar1in9">Projects</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
