@@ -13,16 +13,16 @@
 <meta property="og:site_name" content="b1ank&#39;s blog">
 <meta property="og:description" content="准备工作本地创建世界配置好房间名、密码、游戏模式等，这之后将会运行在你的服务器上。 获取token和用户ID打开游戏左下角的 “账号” 可以获取用户ID，将ID保存在adminlist.txt中。 依次点击上方的游戏、饥荒联机服务器。将token保存在cluster_token.txt中。 把cluster_token.txt和adminlist.txt都放在xxx\Documents\Klei\">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://blog.darin9.top/2020/06/24/dst/id.png">
-<meta property="og:image" content="http://blog.darin9.top/2020/06/24/dst/game.png">
-<meta property="og:image" content="http://blog.darin9.top/2020/06/24/dst/token.png">
-<meta property="og:image" content="http://blog.darin9.top/2020/06/24/dst/pc.png">
-<meta property="og:image" content="http://blog.darin9.top/2020/06/24/dst/server.png">
+<meta property="og:image" content="http://blog.darin9.top/.top//id.png">
+<meta property="og:image" content="http://blog.darin9.top/.top//game.png">
+<meta property="og:image" content="http://blog.darin9.top/.top//token.png">
+<meta property="og:image" content="http://blog.darin9.top/.top//pc.png">
+<meta property="og:image" content="http://blog.darin9.top/.top//server.png">
 <meta property="article:published_time" content="2020-06-23T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-03-22T06:12:29.370Z">
+<meta property="article:modified_time" content="2021-03-22T06:25:02.081Z">
 <meta property="article:author" content="b1ank">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://blog.darin9.top/2020/06/24/dst/id.png">
+<meta name="twitter:image" content="http://blog.darin9.top/.top//id.png">
     
     
       
@@ -153,8 +153,8 @@
 
   <div class="content" itemprop="articleBody">
     <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h4 id="本地创建世界"><a href="#本地创建世界" class="headerlink" title="本地创建世界"></a>本地创建世界</h4><p>配置好房间名、密码、游戏模式等，这之后将会运行在你的服务器上。</p>
-<h4 id="获取token和用户ID"><a href="#获取token和用户ID" class="headerlink" title="获取token和用户ID"></a>获取token和用户ID</h4><p>打开游戏左下角的 “账号” 可以获取用户ID，将ID保存在adminlist.txt中。<br><img src="id.png" alt="img"></p>
-<p>依次点击上方的游戏、饥荒联机服务器。<br><img src="game.png" alt="img"><br><img src="token.png" alt="img"><br>将token保存在cluster_token.txt中。</p>
+<h4 id="获取token和用户ID"><a href="#获取token和用户ID" class="headerlink" title="获取token和用户ID"></a>获取token和用户ID</h4><p>打开游戏左下角的 “账号” 可以获取用户ID，将ID保存在adminlist.txt中。<br><img src="/.top//id.png" alt="img"></p>
+<p>依次点击上方的游戏、饥荒联机服务器。<br><img src="/.top//game.png" alt="img"><br><img src="/.top//token.png" alt="img"><br>将token保存在cluster_token.txt中。</p>
 <p>把cluster_token.txt和adminlist.txt都放在xxx\Documents\Klei\DoNotStarveTogether\xxx\Cluster_1中。<br>其中Cluster_1就是创建的第一个世界，Cluster_2同理。</p>
 <h2 id="动手！"><a href="#动手！" class="headerlink" title="动手！"></a>动手！</h2><h3 id="安装环境依赖"><a href="#安装环境依赖" class="headerlink" title="安装环境依赖"></a>安装环境依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt install libstdc++6:i386 libgcc1:i386 libcurl4-gnutls-dev:i386 lib32gcc1</span><br></pre></td></tr></table></figure>
 <h3 id="64位机器先运行"><a href="#64位机器先运行" class="headerlink" title="64位机器先运行"></a>64位机器先运行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo dpkg --add-architecture i386 &amp;&amp; sudo apt-get update</span><br></pre></td></tr></table></figure>
@@ -168,8 +168,8 @@
 <h3 id="启动饥荒服务器"><a href="#启动饥荒服务器" class="headerlink" title="启动饥荒服务器"></a>启动饥荒服务器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ~&#x2F;dstserver&#x2F;bin</span><br><span class="line">.&#x2F;dontstarve_dedicated_server_nullrenderer</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>目的是使其在 <strong>~/.klei/</strong> 生成基本配置文件，方便覆盖。<br>出现有关token错误时，ctrl+c结束。</p>
 <h3 id="配置存档"><a href="#配置存档" class="headerlink" title="配置存档"></a>配置存档</h3><p>服务器的目录结构和本地的有些许差异。</p>
-<p>本地<br><img src="pc.png" alt="img"></p>
-<p>服务器<br><img src="server.png" alt="img"></p>
+<p>本地<br><img src="/.top//pc.png" alt="img"></p>
+<p>服务器<br><img src="/.top//server.png" alt="img"></p>
 <p>只需将 <strong>数字/Cluster_1</strong> 覆盖 <strong>Cluster_1</strong> ，并将<strong>数字/client_save</strong>里面内容拖进 <strong>\Cluster_1\Master\save</strong></p>
 <h3 id="运行服务器"><a href="#运行服务器" class="headerlink" title="运行服务器"></a>运行服务器</h3><p>创建 start.sh 如下内容。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> ~/dstserver/bin</span><br><span class="line">screen -S <span class="string">&quot;Don&#x27;t Starve Together Server&quot;</span> ./dontstarve_dedicated_server_nullrenderer</span><br><span class="line"></span><br></pre></td></tr></table></figure>
